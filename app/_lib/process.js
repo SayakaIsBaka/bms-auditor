@@ -47,7 +47,13 @@ const checkKeysoundLength = async (folder, charts) => {
         const keysounds = Keysounds.fromBMSChart(chart);
         const keysoundFiles = keysounds.files();
         for (var f of keysoundFiles) {
-            let keysound = folder.find(e => e.name.replace(/\.[^/.]+$/, "") === f.replace(/\.[^/.]+$/, "")); // ignore extension
+            let keysound = folder.find(e => e.name === f);
+            if (keysound === undefined) {
+                const keysoundExtensions = [".wav", ".ogg", ".flac"];
+                for (var i = 0; i < 3 && keysound === undefined; i++) {
+                    keysound = folder.find(e => e.name === f.replace(/\.[^/.]+$/, keysoundExtensions[i]));
+                }
+            }
             if (keysound === undefined) {
                 console.log("Keysound not found in folder: " + f);
             } else {
@@ -62,6 +68,7 @@ const checkKeysoundLength = async (folder, charts) => {
                     }
                 } catch (e) {
                     console.log("Could not decode keysound " + keysound.name + ", skipping...");
+                    console.log(e)
                 }
             }
         }
