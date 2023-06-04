@@ -31,7 +31,7 @@ const checkMaxGridPartition = async (charts) => {
         }
         console.log("Max grid partition for " + c.name + ": " + maxGridPartition);
         if (maxGridPartition === 192) {
-            const issue = new Issue(IssueType.MaxGridPartition, c.name, maxGridPartition);
+            const issue = new Issue(IssueType.MaxGridPartition, c.name, "");
             issues.push(issue);
         }
     }
@@ -52,12 +52,16 @@ const checkKeysoundLength = async (folder, charts) => {
                 console.log("Keysound not found in folder: " + f);
             } else {
                 const keysoundArrayBuffer = await keysound.arrayBuffer();
-                const audioBuffer = await audioContext.decodeAudioData(keysoundArrayBuffer);
-                if (audioBuffer.duration >= 60.0) {
-                    if (issues.find(e => e.issueType === IssueType.KeysoundLength && e.file === keysound.name) === undefined) { // don't add if already reported
-                        const issue = new Issue(IssueType.KeysoundLength, keysound.name, audioBuffer.duration);
-                        issues.push(issue);
+                try {
+                    const audioBuffer = await audioContext.decodeAudioData(keysoundArrayBuffer);
+                    if (audioBuffer.duration >= 60.0) {
+                        if (issues.find(e => e.issueType === IssueType.KeysoundLength && e.file === keysound.name) === undefined) { // don't add if already reported
+                            const issue = new Issue(IssueType.KeysoundLength, keysound.name, audioBuffer.duration + "s");
+                            issues.push(issue);
+                        }
                     }
+                } catch (e) {
+                    console.log("Could not decode keysound " + keysound.name + ", skipping...");
                 }
             }
         }
@@ -67,19 +71,20 @@ const checkKeysoundLength = async (folder, charts) => {
 const checkAsciiFilenames = (folder) => {
     const folderName = folder[0].directoryHandle.name
     if (!isAscii(folderName)) {
-        const issue = new Issue(IssueType.NonAsciiFilename, folderName, folderName);
+        const issue = new Issue(IssueType.NonAsciiFilename, folderName, "");
         issues.push(issue);
     }
     for (var file of folder) {
         const fileName = file.name
         if (!isAscii(fileName)) {
-            const issue = new Issue(IssueType.NonAsciiFilename, fileName, fileName);
+            const issue = new Issue(IssueType.NonAsciiFilename, fileName, "");
             issues.push(issue);
         }
     }
 }
 
 export const processFolder = async (folder) => {
+    issues = []
     const bmsExtensions = ['bms', 'bme', 'bml', 'pms'];
     let charts = folder.filter(e => bmsExtensions.includes(e.name.split('.').pop()));
     if (charts.length < 1) {
@@ -93,4 +98,5 @@ export const processFolder = async (folder) => {
     checkAsciiFilenames(folder);
 
     console.log(issues)
+    return issues
 };
