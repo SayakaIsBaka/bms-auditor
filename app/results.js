@@ -1,6 +1,7 @@
 "use client";
 
 import { Severity } from "./_lib/types";
+import { Tooltip } from "react-tooltip";
 
 const renderSeverity = (severity) => {
   switch (severity) {
@@ -71,7 +72,7 @@ export default function ResultsTable({ results }) {
         >
           <div className="flex gap-x-4">
             <div className="min-w-0 flex-auto">
-              <p className="text-sm font-semibold leading-6 text-gray-900">
+              <p className="text-sm font-semibold leading-6 text-gray-900" data-tooltip-id="issue-tooltip" data-tooltip-content={result.issueType.description} data-tooltip-place="top">
                 {result.issueType.name}
               </p>
               <p className="mt-1 truncate text-xs leading-5 text-gray-500">
@@ -87,6 +88,7 @@ export default function ResultsTable({ results }) {
           </div>
         </li>
       ))}
+      <Tooltip id="issue-tooltip" style={{fontSize: "75%", wordBreak: "break-word", overflowWrap: "break-word", maxWidth: "400px"}} />
     </ul>
   );
 }
