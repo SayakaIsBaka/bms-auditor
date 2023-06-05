@@ -43,7 +43,7 @@ export default function Home() {
           </a>
         </div>
         {results ? (
-        <div className="border-gray-300 bg-gray-100 px-5 py-4 rounded-lg border border-transparent mt-8 overflow-auto scrollbar">
+        <div className="border-gray-300 bg-gray-100 px-5 py-1 rounded-lg border border-transparent mt-8 overflow-auto scrollbar">
           {results}
         </div>
         ) : "" }
