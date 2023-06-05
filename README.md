@@ -2,7 +2,7 @@
 
 A fully client-side web application to check for common mistakes during BMS production. Based off w's checklist: https://wcko87.github.io/bms-checklist/
 
-Live version available here: TODO
+Live version available here: https://sayakaisbaka.github.io/bms-auditor
 
 ## Current features
 - Encoding check
