@@ -14,6 +14,8 @@ Live version available here: https://sayakaisbaka.github.io/bms-auditor
 - basically everything else in the checklist
 - actually make a proper UI
 - maybe offer conversion features (movie transcode, wav to ogg)
+- drag and drop
+- show notification if error
 
 ## Credits
 - Encoding detection slightly modified from bemuse-chardet: https://github.com/bemusic/bemuse-chardet

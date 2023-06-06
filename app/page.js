@@ -17,7 +17,11 @@ export default function Home() {
     let res = await processFolder(folder);
     if (res !== null) {
       // display results
-      setResults(<ResultsTable results={res} />);
+      if (res.length === 0) {
+        setResults("No issues found!")
+      } else {
+        setResults(<ResultsTable results={res} />);
+      }
     }
   };
 
@@ -55,6 +59,7 @@ export default function Home() {
             <a
               href="https://github.com/SayakaIsBaka/bms-auditor"
               className="text-gray-400 hover:text-gray-900 dark:hover:text-white"
+              target="_blank"
             >
               <svg
                 className="w-5 h-5"
