@@ -11,6 +11,9 @@ Live version available here: https://sayakaisbaka.github.io/bms-auditor
 - ASCII file / folder names check
 - OGG keysound check
 - Separate OGG BMS check
+- Unsupported BGA / BMP format check
+- MP4 BGA file defined in BMS check
+- Large BGA file check
 
 ## TODO
 - basically everything else in the checklist
