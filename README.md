@@ -10,6 +10,7 @@ Live version available here: https://sayakaisbaka.github.io/bms-auditor
 - Keysound length check
 - ASCII file / folder names check
 - OGG keysound check
+- Separate OGG BMS check
 
 ## TODO
 - basically everything else in the checklist

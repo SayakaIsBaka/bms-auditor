@@ -32,6 +32,11 @@ export const IssueType = Object.freeze({
         name: "Non-OGG keysounds",
         severity: Severity.Medium,
         description: "It is recommended to use OGG keysounds as WAV keysounds are usually very large with little to no quality gain. Tools like oggenc2 or oggdropXPd can be used to convert keysounds to OGG."
+    },
+    SeparateOggBms: {
+        name: "Separate OGG BMS",
+        severity: Severity.High,
+        description: "Keysounds were found to be defined as OGG in the BMS file. It is not needed to redfine the extension as BMS clients will automatically search for WAV / OGG files if the defined keysound was not found. Having different BMS files for different file formats will create duplicates in internet rankings, which is undesireable. This error can be ignored if only one format will be published."
     }
 })
 

@@ -47,6 +47,7 @@ const checkKeysound = async (folder, charts) => {
         const keysounds = Keysounds.fromBMSChart(chart);
         const keysoundFiles = keysounds.files();
         let wavKeysounds = false;
+        let separateKeysounds = false;
         for (var f of keysoundFiles) {
             let keysound = folder.find(e => e.name === f);
             if (keysound === undefined) {
@@ -54,11 +55,17 @@ const checkKeysound = async (folder, charts) => {
                 for (var i = 0; i < 3 && keysound === undefined; i++) {
                     keysound = folder.find(e => e.name === f.replace(/\.[^/.]+$/, keysoundExtensions[i]));
                 }
+            } else {
+                if (keysound.name.split('.').pop() === "ogg" && !separateKeysounds) { // If ogg keysound is defined in the BMS and the file is found
+                    const issue = new Issue(IssueType.SeparateOggBms, c.name, "");
+                    issues.push(issue);
+                    separateKeysounds = true;
+                }
             }
             if (keysound === undefined) {
                 console.log("Keysound not found in folder: " + f);
             } else {
-                if (keysound.name.split('.').pop() === "wav" && !wavKeysounds) {
+                if (keysound.name.split('.').pop() === "wav" && !wavKeysounds) { // If wav keysound is found
                     const issue = new Issue(IssueType.NonOggKeysounds, c.name, "");
                     issues.push(issue);
                     wavKeysounds = true;
