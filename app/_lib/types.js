@@ -27,6 +27,11 @@ export const IssueType = Object.freeze({
         name: "Non-ASCII filename / folder name",
         severity: Severity.Low,
         description: "It is recommended to use ASCII characters for filenames in order to avoid compatibility issues, especially with non-japanese locale computers."
+    },
+    NonOggKeysounds: {
+        name: "Non-OGG keysounds",
+        severity: Severity.Medium,
+        description: "It is recommended to use OGG keysounds as WAV keysounds are usually very large with little to no quality gain. Tools like oggenc2 or oggdropXPd can be used to convert keysounds to OGG."
     }
 })
 

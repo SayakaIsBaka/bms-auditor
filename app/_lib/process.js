@@ -37,7 +37,7 @@ const checkMaxGridPartition = async (charts) => {
     }
 };
 
-const checkKeysoundLength = async (folder, charts) => {
+const checkKeysound = async (folder, charts) => {
     const audioContext = new (window.AudioContext || window.webkitAudioContext)();
     console.log("Starting keysound length detection... (this takes a few seconds)")
 
@@ -46,6 +46,7 @@ const checkKeysoundLength = async (folder, charts) => {
         let chart = Compiler.compile(chartStr).chart;
         const keysounds = Keysounds.fromBMSChart(chart);
         const keysoundFiles = keysounds.files();
+        let wavKeysounds = false;
         for (var f of keysoundFiles) {
             let keysound = folder.find(e => e.name === f);
             if (keysound === undefined) {
@@ -57,6 +58,11 @@ const checkKeysoundLength = async (folder, charts) => {
             if (keysound === undefined) {
                 console.log("Keysound not found in folder: " + f);
             } else {
+                if (keysound.name.split('.').pop() === "wav" && !wavKeysounds) {
+                    const issue = new Issue(IssueType.NonOggKeysounds, c.name, "");
+                    issues.push(issue);
+                    wavKeysounds = true;
+                }
                 const keysoundArrayBuffer = await keysound.arrayBuffer();
                 try {
                     const audioBuffer = await audioContext.decodeAudioData(keysoundArrayBuffer);
@@ -101,7 +107,7 @@ export const processFolder = async (folder) => {
 
     await checkEncoding(charts);
     await checkMaxGridPartition(charts);
-    await checkKeysoundLength(folder, charts);
+    await checkKeysound(folder, charts);
     checkAsciiFilenames(folder);
 
     console.log(issues)

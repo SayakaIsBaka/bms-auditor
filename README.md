@@ -9,6 +9,7 @@ Live version available here: https://sayakaisbaka.github.io/bms-auditor
 - Max grid partition check
 - Keysound length check
 - ASCII file / folder names check
+- OGG keysound check
 
 ## TODO
 - basically everything else in the checklist
