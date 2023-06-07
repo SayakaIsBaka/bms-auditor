@@ -1,7 +1,7 @@
 import { detectEncoding } from './chardet';
 import { Issue, IssueType } from './types';
 import { Reader, Compiler, Keysounds } from 'bms';
-import { isAscii } from './utils';
+import { formatBytes, isAscii, toBase36 } from './utils';
 
 let issues = []
 
@@ -103,6 +103,60 @@ const checkAsciiFilenames = (folder) => {
     }
 }
 
+const checkBga = async (folder, charts) => {
+    const maxSize = 40000000 // 40M
+
+    for (var c of charts) {
+        const chartStr = Reader.read(Buffer.from(await c.arrayBuffer()));
+        let chart = Compiler.compile(chartStr).chart;
+        for (var i = 1; i < 1296; i++) {
+            let bmp = chart.headers.get("bmp" + toBase36(i));
+            if (bmp !== undefined) {
+                const bmpExtensions = ["wmv", "mpg", "mpeg", "png", "jpg", "jpeg", "bmp"];
+                const curBmpExtension = bmp.split('.').pop();
+                if (!bmpExtensions.includes(curBmpExtension)) {
+                    if (issues.find(e => e.issueType === IssueType.WrongBgaFormat && e.file === bmp) === undefined) {
+                        const issue = new Issue(IssueType.WrongBgaFormat, bmp, curBmpExtension);
+                        issues.push(issue);
+                    }
+                }
+                let bmpFile = folder.find(e => e.name === bmp);
+                if (bmpFile === undefined) {
+                    const bmpFallbackExtensions = [".png", ".jpg", ".bmp"];
+                    for (var i = 0; i < 3 && bmpFile === undefined; i++) {
+                        bmpFile = folder.find(e => e.name === bmp.replace(/\.[^/.]+$/, bmpFallbackExtensions[i]));
+                    }
+                } else {
+                    if (curBmpExtension === "mp4") { // If mp4 BGA is defined in the BMS and the file is found
+                        const issue = new Issue(IssueType.Mp4BgaDefined, c.name, bmpFile.name);
+                        issues.push(issue);
+                    }
+                }
+                if (bmpFile === undefined) {
+                    console.log("BMP file not found in folder: " + f);
+                } else {
+                    let mp4Fallback = undefined;
+                    if (curBmpExtension !== "mp4") {
+                        mp4Fallback = folder.find(e => e.name === bmp.replace(/\.[^/.]+$/, ".mp4"))
+                    }
+                    if (bmpFile.size > maxSize) {
+                        if (issues.find(e => e.issueType === IssueType.LargeBgaFile && e.file === bmpFile.name) === undefined) {
+                            const issue = new Issue(IssueType.LargeBgaFile, bmpFile.name, formatBytes(bmpFile.size, 1));
+                            issues.push(issue);
+                        }
+                    }
+                    if (mp4Fallback !== undefined && mp4Fallback.size > maxSize) {
+                        if (issues.find(e => e.issueType === IssueType.LargeBgaFile && e.file === mp4Fallback.name) === undefined) {
+                            const issue = new Issue(IssueType.LargeBgaFile, mp4Fallback.name, formatBytes(mp4Fallback.size, 1));
+                            issues.push(issue);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 export const processFolder = async (folder) => {
     issues = []
     const bmsExtensions = ['bms', 'bme', 'bml', 'pms'];
@@ -116,6 +170,7 @@ export const processFolder = async (folder) => {
     await checkMaxGridPartition(charts);
     await checkKeysound(folder, charts);
     checkAsciiFilenames(folder);
+    await checkBga(folder, charts);
 
     console.log(issues)
     return issues

@@ -37,6 +37,21 @@ export const IssueType = Object.freeze({
         name: "Separate OGG BMS",
         severity: Severity.High,
         description: "Keysounds were found to be defined as OGG in the BMS file. It is not needed to redfine the extension as BMS clients will automatically search for WAV / OGG files if the defined keysound was not found. Having different BMS files for different file formats will create duplicates in internet rankings, which is undesireable. This error can be ignored if only one format will be published."
+    },
+    WrongBgaFormat: {
+        name: "Unsupported BGA format",
+        severity: Severity.High,
+        description: "The file format used for the BGA file is not supported by all BMS clients, which may cause issues during playback. It is recommended to use wmv / mpg for videos and png / jpg / bmp for images for maximum compatibility. The mp4 format can also be used for more modern clients but a wmv / mpg file should also be included for older clients as well."
+    },
+    Mp4BgaDefined: {
+        name: "MP4 BGA file defined in the BMS",
+        severity: Severity.Medium,
+        description: "The BGA file defined in the BMS uses the mp4 format. While this format is supported by newer clients, older clients might not support it reliably. It is recommended to define the fallback movie file (wmv / mpg) in the BMS file as newer clients are able to find the mp4 file automatically if it has the same name."
+    },
+    LargeBgaFile: {
+        name: "Large BGA file",
+        severity: Severity.Medium,
+        description: "The BGA file is over 40MB. It is recommended to keep it under that size in order to make the BMS package smaller and keep a smaller disk footprint."
     }
 })
 
