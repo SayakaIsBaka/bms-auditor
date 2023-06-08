@@ -158,6 +158,16 @@ const checkBga = async (folder, charts) => {
     }
 }
 
+const checkDiff = async (charts) => {
+    const diffCharts = await bmsDiff(charts);
+    for (var diff of diffCharts) {
+        if (diff.diffNotes.length > 0 || diff.diffBmp.length > 0 || diff.diffWav.length > 0) {
+            const issue = new Issue(IssueType.BmsDifference, diff.path, diff);
+            issues.push(issue);
+        }
+    }
+};
+
 export const processFolder = async (folder) => {
     issues = []
     const bmsExtensions = ['bms', 'bme', 'bml', 'pms'];
@@ -172,7 +182,7 @@ export const processFolder = async (folder) => {
     await checkKeysound(folder, charts);
     checkAsciiFilenames(folder);
     await checkBga(folder, charts);
-    console.log(await bmsDiff(charts))
+    await checkDiff(charts);
 
     console.log(issues)
     return issues

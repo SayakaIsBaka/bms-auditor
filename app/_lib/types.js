@@ -52,6 +52,11 @@ export const IssueType = Object.freeze({
         name: "Large BGA file",
         severity: Severity.Medium,
         description: "The BGA file is over 40MB. It is recommended to keep it under that size in order to make the BMS package smaller and keep a smaller disk footprint."
+    },
+    BmsDifference: {
+        name: "Differences in BMS found",
+        severity: Severity.Medium,
+        description: "Differences in keysound placement have been found between charts. When making charts of different difficulties using iBMSC / uBMSC / pBMSC, make sure that you have Disable vertical moves (D) checked when moving notes around. This is to prevent accidental upward/downward shifting of keysounds when charting."
     }
 });
 

@@ -2,6 +2,9 @@
 
 import { Severity } from "./_lib/types";
 import { Tooltip } from "react-tooltip";
+import { IssueType } from "./_lib/types";
+import { useState } from 'react';
+import DifferenceDetails from "./difference";
 
 const renderSeverity = (severity) => {
   switch (severity) {
@@ -63,6 +66,8 @@ const renderSeverity = (severity) => {
 };
 
 export default function ResultsTable({ results }) {
+  const [open, setOpen] = useState(false)
+
   return (
     <ul role="list" className="divide-y divide-gray-100">
       {results.map((result) => (
@@ -81,7 +86,13 @@ export default function ResultsTable({ results }) {
             </div>
           </div>
           <div className="hidden sm:flex sm:flex-col sm:items-end">
-            <p className="text-sm leading-6 text-gray-900">{result.results}</p>
+            <div className="text-sm leading-6 text-gray-900">
+                {result.issueType === IssueType.BmsDifference ? (
+                  <>
+                    <button className="" onClick={() => setOpen(true)}>Details</button>
+                    <DifferenceDetails open={open} onStateChange={() => setOpen(false)} data={result.results} />
+                  </>
+                ) : result.results}</div>
             <div className="mt-1 flex items-center gap-x-1.5">
               {renderSeverity(result.issueType.severity)}
             </div>

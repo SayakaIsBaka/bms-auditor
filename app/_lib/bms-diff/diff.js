@@ -89,7 +89,7 @@ function diffMain(selected, selectedBms, bms, precision, nosoundobj, bmsFiles) {
             count = 0;
 
             // 曲情報
-            const bmsPath = bmsFiles[i].webkitRelativePath;
+            const bmsPath = bmsFiles[i].name;
             const bmsMd5 = bms[i].md5;
             const bmsGenre = bms[i].headerData.GENRE;
             const bmsTitle = bms[i].headerData.TITLE;
@@ -207,7 +207,7 @@ export const bmsDiff = async (charts, precision = 1, compareBlankKeysounds = fal
         bms.push(b);
         if (selectedBms === undefined) {
             selectedBms = b;
-            selected = c.webkitRelativePath;
+            selected = c.name;
         }
     }
 
