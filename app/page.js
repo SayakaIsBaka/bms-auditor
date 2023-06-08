@@ -5,16 +5,20 @@ import { openDirectory } from "./_lib/folder_picker";
 import { processFolder } from "./_lib/process";
 import ResultsTable from "./results";
 import { useState } from "react";
+import Spinner from "./spinner";
 
 export default function Home() {
   const [results, setResults] = useState();
+  const [spinner, setSpinner] = useState(false);
 
   const loadFolder = async () => {
     let folder = await openDirectory();
     if (folder === undefined) return;
     // Filter subfolders
     folder = folder.filter((e) => e.webkitRelativePath.split("/").length === 2);
+    setSpinner(true)
     let res = await processFolder(folder);
+    setSpinner(false)
     if (res !== null) {
       // display results
       if (res.length === 0) {
@@ -46,6 +50,11 @@ export default function Home() {
             </p>
           </a>
         </div>
+        {spinner ? (
+        <div className="pt-4">
+          <Spinner />
+        </div>
+        ) : "" }
         {results ? (
         <div className="border-gray-300 bg-gray-100 px-5 py-1 rounded-lg border border-transparent mt-8 overflow-auto scrollbar">
           {results}
