@@ -172,7 +172,7 @@ export const processFolder = async (folder) => {
     await checkKeysound(folder, charts);
     checkAsciiFilenames(folder);
     await checkBga(folder, charts);
-    console.log(bmsDiff(charts))
+    console.log(await bmsDiff(charts))
 
     console.log(issues)
     return issues

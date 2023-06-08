@@ -166,36 +166,37 @@ function diffMain(selected, selectedBms, bms, precision, nosoundobj, bmsFiles) {
             let diffObj = new DiffChart(bmsPath, selected, diffWavDef, diffBmpDef, diffNotes)
             res.push(diffObj);
         }
-        console.log(res);
+        return res;
     } catch (e) {
         alert(e.message);
         console.log(e);
     }
 }
 
-function parseWait(selected, selectedBms, bms, precision, nosoundobj, bmsFiles) {
+const parseWait = async (selected, selectedBms, bms, precision, nosoundobj, bmsFiles) => {
     try {
-        var i,
-            bRetry = false;
-        for (i = 0; i < bms.length; i++) {
-            if (!bms[i].isParsed) {
-                bRetry = true;
+        while (true) {
+            let bRetry = false;
+            for (var i = 0; i < bms.length; i++) {
+                if (!bms[i].isParsed) {
+                    bRetry = true;
+                }
+            }
+        
+            if (bRetry) {
+                await new Promise(r => setTimeout(r, 1000));
+            } else {
+                break
             }
         }
-    
-        if (bRetry) {
-            setTimeout(parseWait, 1000, selected, selectedBms, bms, precision, nosoundobj, bmsFiles);
-            return;
-        }
-    
-        diffMain(selected, selectedBms, bms, precision, nosoundobj, bmsFiles);
+        return diffMain(selected, selectedBms, bms, precision, nosoundobj, bmsFiles);
     } catch (e) {
         alert(e.message);
         console.log(e);
     }
 }
 
-export const bmsDiff = (charts, precision = 1, compareBlankKeysounds = false) => {
+export const bmsDiff = async (charts, precision = 1, compareBlankKeysounds = false) => {
     let bms = []
     let selectedBms = undefined;
     let selected = undefined;
@@ -211,7 +212,7 @@ export const bmsDiff = (charts, precision = 1, compareBlankKeysounds = false) =>
     }
 
     if (selectedBms !== undefined) {
-        parseWait(selected, selectedBms, bms, precision, compareBlankKeysounds, charts);
+        return parseWait(selected, selectedBms, bms, precision, compareBlankKeysounds, charts);
     } else {
         console.log("Error: no BMS files loaded (this shouldn't happen)")
     }
