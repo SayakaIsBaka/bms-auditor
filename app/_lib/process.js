@@ -2,7 +2,7 @@ import { detectEncoding } from './chardet';
 import { Issue, IssueType } from './types';
 import { Reader, Compiler, Keysounds } from 'bms';
 import { formatBytes, isAscii, toBase36 } from './utils';
-import { bmsDiff } from './diff';
+import { bmsDiff } from './bms-diff/diff';
 
 let issues = []
 

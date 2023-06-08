@@ -1,4 +1,4 @@
-import { DiffChart, DiffEntry } from "./types";
+import { DiffChart, DiffEntry } from "../types";
 import BmsResource from "./bms_diff";
 
 function FindNoteResult(result, note) {
