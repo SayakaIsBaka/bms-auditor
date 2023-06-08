@@ -66,7 +66,7 @@ const renderSeverity = (severity) => {
 };
 
 export default function ResultsTable({ results }) {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState({})
 
   return (
     <ul role="list" className="divide-y divide-gray-100">
@@ -89,8 +89,8 @@ export default function ResultsTable({ results }) {
             <div className="text-sm leading-6 text-gray-900">
                 {result.issueType === IssueType.BmsDifference ? (
                   <>
-                    <button className="" onClick={() => setOpen(true)}>Details</button>
-                    <DifferenceDetails open={open} onStateChange={() => setOpen(false)} data={result.results} />
+                    <button className="hover:underline" onClick={() => setOpen(prev => ({ ...prev, [result.results.path]: true }))}>Details</button>
+                    <DifferenceDetails open={open[result.results.path] === undefined ? false : open[result.results.path]} onStateChange={() => setOpen(prev => ({ ...prev, [result.results.path]: false }))} data={result.results} />
                   </>
                 ) : result.results}</div>
             <div className="mt-1 flex items-center gap-x-1.5">

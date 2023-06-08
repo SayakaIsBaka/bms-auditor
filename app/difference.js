@@ -1,6 +1,7 @@
 import { Fragment, useRef } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { ClipboardDocumentCheckIcon } from "@heroicons/react/24/outline";
+import DifferenceTable from "./difftable";
 
 export default function DifferenceDetails(props) {
   const cancelButtonRef = useRef(null);
@@ -58,6 +59,7 @@ export default function DifferenceDetails(props) {
                           <br />
                           Reference chart: {props.data.refPath}
                         </p>
+                        <DifferenceTable results={props.data.diffNotes} />
                       </div>
                     </div>
                   </div>
