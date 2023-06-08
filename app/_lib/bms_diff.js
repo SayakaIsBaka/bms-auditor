@@ -1,11 +1,4 @@
-"use strict";
-/* utf-8 */
-/*global clearInterval, clearTimeout, document, event, frames, history, Image, location, name, navigator, Option, parent, screen, setInterval, setTimeout, window, XMLHttpRequest, escape */
-/*global alert, confirm, console, Debug, opera, prompt, WSH, URL */
-/*global FileReader, FileReaderSync, Blob, webkitAudioContext, Uint8Array, requestAnimFrame */
-/*global Gamepad, jsmpeg, PIXI, zip, jQuery, $, CryptoJS, MD5_hexhash */
-/*jslint plusplus: true, vars: true, bitwise: true, regexp: true,
-forin: true, continue: true */
+import MD5_hexhash from "./md5";
 
 function gcd(x, y) {
     var a = x,
@@ -26,7 +19,7 @@ function lcm(x, y) {
 
 // Structure
 //NOTE:Bms Resource
-function BmsResource() {
+export default function BmsResource() {
     this.md5 = "";
     this.registFiles = [];
     this.bmsdata = [];
@@ -57,111 +50,6 @@ function BmsResource() {
     //this.measureDissolution = [];
     //this.measureLength = [];
     this.isParsed = false;
-
-	this.loadResourceData = function (audioContext) {
-	    console.info(this.registFiles.length.toString() + "files");
-	    var i, f, cnt, isRead;
-        cnt = 0;
-        this.loadCount = this.registFiles.length;
-	    for (i = 0; i < this.registFiles.length; i++) {
-	        try {
-	            f = this.registFiles[i];
-	            if (f.type.match(/image.*/) || f.type.match(/video.*/) || f.type.match(/audio.*/)) {
-	                var fr = new FileReader(); // ReaderはFileごとに個別である必要有
-                    cnt++;
-                    console.log(cnt.toString(), 'load start:', f.name);
-	                fr.onload = (function (file, bms) {
-	                    return function (e) {
-	                        try {
-	                            var j, k;
-	                            var filename = file.name.split(".")[0];
-	                            if (file.type.match(/image.*/)) {
-                                    bms.loadCount--;
-	                                for (j in bms.bgaData) {
-	                                    if (bms.bgaData[j].indexOf(filename) !== -1) {
-
-	                                        var img = document.createElement('img');
-	                                        var cvsobj = document.createElement('canvas');
-	                                        cvsobj.width = 256;
-	                                        cvsobj.height = 256;
-	                                        var cvsctx = cvsobj.getContext("2d");
-	                                        var tmpbuf;
-	                                        img.src = e.target.result;
-	                                        cvsctx.drawImage(img, 0, 0, img.width, img.height);
-	                                        tmpbuf = cvsctx.getImageData(0, 0, img.width, img.height);
-	                                        for (k = 0; k < tmpbuf.data.length; k += 4) {
-	                                            if ((tmpbuf.data[k] + tmpbuf.data[k + 1] + tmpbuf.data[k + 2]) === 0) {
-	                                                tmpbuf.data[k + 3] = 0;
-	                                            }
-	                                        }
-	                                        cvsctx.putImageData(tmpbuf, 0, 0);
-	                                        //img.src = cvsobj.toDataURL("image/png");
-	                                        //bms.bgaRsrc[j] = img;
-                                            bms.bgaRsrc[j] = PIXI.Texture.fromCanvas(cvsobj);
-	                                        //delete img;
-	                                        //delete cvsctx;
-	                                    }
-	                                }
-	                            } else if (file.type.match(/video.*/)) {
-                                    bms.loadCount--;
-	                                for (j in this.bgaData) {
-	                                    if (bms.bgaData[j].indexOf(filename) !== -1) {
-	                                        bms.bgaRsrc[j] = e.target.result;
-	                                    }
-	                                }
-	                                var vid = document.getElementById("vid");
-	                                vid.src = URL.createObjectURL(new Blob([e.target.result], {
-	                                    type: file.type
-	                                }));
-	                            } else if (file.type.match(/audio.*/)) {
-                                    isRead = false;
-	                                for (j in bms.wavData) {
-	                                    if (bms.wavData[j].split(".")[0] === filename) {
-                                            isRead = true;
-	                                        audioContext.decodeAudioData(e.target.result, (function (note) {
-	                                            return function (buf) {
-                                                    var l;
-                                                    bms.loadCount--;
-	                                                console.log("decodeAudioData:", note);
-	                                                bms.wavRsrc[note] = buf;
-                                                    for (l in bms.wavData) {
-                                                        if (note !== l && bms.wavData[l] === bms.wavData[note]) {
-                                                            bms.wavRsrc[l] = buf;
-                                                        }
-                                                    }
-	                                            };
-	                                        })(j), function (e) {
-                                                bms.loadCount--;
-	                                            console.log('Error decoding file', e);
-	                                        });
-                                            break;
-	                                    }
-	                                }
-                                    
-                                    if (!isRead) {
-                                        bms.loadCount--;
-                                    }
-	                            }
-	                            console.log("load end:", file.name);
-	                        } catch (ex) {
-	                            console.error(ex);
-	                        }
-	                    };
-	                })(f, this);
-	                if (f.type.match(/image.*/)) {
-	                    fr.readAsDataURL(f);
-	                } else if (f.type.match(/audio.*/) || f.type.match(/video.*/)) {
-	                    fr.readAsArrayBuffer(f);
-	                }
-                } else {
-                    console.log("load skip:", f.name);
-                    this.loadCount--;
-	            }
-	        } catch (e) {
-	            console.error(e);
-	        }
-	    }
-	};
 
 	this.calcPlayData = function (noteData) {
 	    var pd = [],
@@ -484,18 +372,5 @@ function BmsResource() {
         frHash.readAsBinaryString(f);
 
         fr.readAsText(f, "Windows-31J");
-	};
-
-	this.loadBmsFile = function (f, dropFiles, audioContext) {
-	    var i;
-        var bmsDir = f.dirName.substring(0, f.dirName.lastIndexOf("/"));
-	    for (i = 0; i < dropFiles.length; i++) {
-            if (dropFiles[i].dirName.indexOf(bmsDir) === 0) {
-                this.registFiles.push(dropFiles[i]);
-            }
-	    }
-	    this.parseBmsFile(f);
-	    this.loadResourceData(audioContext);
-	    return;
 	};
 }

@@ -5,7 +5,7 @@ export const Severity = Object.freeze({
 	Low: Symbol("Low"),
     Informational: Symbol("Informational"),
     Unknown: Symbol("Unknown")
-})
+});
 
 export const IssueType = Object.freeze({
 	Encoding: {
@@ -53,7 +53,7 @@ export const IssueType = Object.freeze({
         severity: Severity.Medium,
         description: "The BGA file is over 40MB. It is recommended to keep it under that size in order to make the BMS package smaller and keep a smaller disk footprint."
     }
-})
+});
 
 export const Issue = class {
     constructor(issueType, file, results) {
@@ -62,3 +62,21 @@ export const Issue = class {
       this.results = results;
     }
   };
+
+export const DiffEntry = class {
+    constructor(measure, lane, note) {
+        this.measure = measure;
+        this.lane = lane;
+        this.note = note;
+    }
+};
+
+export const DiffChart = class {
+    constructor(path, refPath, diffWav, diffBmp, diffNotes) {
+        this.path = path;
+        this.refPath = refPath;
+        this.diffWav = diffWav;
+        this.diffBmp = diffBmp;
+        this.diffNotes = diffNotes;
+    }
+};

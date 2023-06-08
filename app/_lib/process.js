@@ -2,6 +2,7 @@ import { detectEncoding } from './chardet';
 import { Issue, IssueType } from './types';
 import { Reader, Compiler, Keysounds } from 'bms';
 import { formatBytes, isAscii, toBase36 } from './utils';
+import { bmsDiff } from './diff';
 
 let issues = []
 
@@ -123,8 +124,8 @@ const checkBga = async (folder, charts) => {
                 let bmpFile = folder.find(e => e.name === bmp);
                 if (bmpFile === undefined) {
                     const bmpFallbackExtensions = [".png", ".jpg", ".bmp"];
-                    for (var i = 0; i < 3 && bmpFile === undefined; i++) {
-                        bmpFile = folder.find(e => e.name === bmp.replace(/\.[^/.]+$/, bmpFallbackExtensions[i]));
+                    for (var j = 0; j < 3 && bmpFile === undefined; j++) {
+                        bmpFile = folder.find(e => e.name === bmp.replace(/\.[^/.]+$/, bmpFallbackExtensions[j]));
                     }
                 } else {
                     if (curBmpExtension === "mp4") { // If mp4 BGA is defined in the BMS and the file is found
@@ -133,7 +134,7 @@ const checkBga = async (folder, charts) => {
                     }
                 }
                 if (bmpFile === undefined) {
-                    console.log("BMP file not found in folder: " + f);
+                    console.log("BMP file not found in folder: " + bmp);
                 } else {
                     let mp4Fallback = undefined;
                     if (curBmpExtension !== "mp4") {
@@ -171,6 +172,7 @@ export const processFolder = async (folder) => {
     await checkKeysound(folder, charts);
     checkAsciiFilenames(folder);
     await checkBga(folder, charts);
+    console.log(bmsDiff(charts))
 
     console.log(issues)
     return issues
