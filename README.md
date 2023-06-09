@@ -18,7 +18,8 @@ Live version available here: https://sayakaisbaka.github.io/bms-auditor
 
 ## TODO
 - basically everything else in the checklist
-- describe columns in diff results
+- calculate average loudness of BMS
+- better BGA checks (actual codec detection, resolution detection, etc.)
 - maybe offer conversion features (movie transcode, wav to ogg)
 - drag and drop
 - show notification if error

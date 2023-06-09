@@ -1,6 +1,52 @@
 import { DiffChart, DiffEntry } from "../types";
 import BmsResource from "./bms_diff";
 
+const getLaneDescription = (lane) => {
+    let l = lane.toUpperCase();
+    switch (l) {
+        case "01":
+            return "01 (BGM)";
+        case "02":
+            return "02 (Measure length)";
+        case "03":
+            return "03 (BPM change)";
+        case "04":
+            return "04 (BMP base)";
+        case "06":
+            return "06 (BMP poor)";
+        case "07":
+            return "07 (BMP layer)";
+        case "09":
+            return "09 (STOP)";
+        case "11":
+        case "12":
+        case "13":
+        case "14":
+        case "15":
+            return `${l} (1P lane ${l[1]})`;
+        case "16":
+            return "16 (1P scratch lane)"
+        case "18":
+            return "18 (1P lane 6)"
+        case "19":
+            return "19 (1P lane 7)"
+        case "21":
+        case "22":
+        case "23":
+        case "24":
+        case "25":
+            return `${l} (2P lane ${l[1]})`;
+        case "26":
+            return "26 (2P scratch lane)"
+        case "28":
+            return "28 (2P lane 6)"
+        case "29":
+            return "29 (2P lane 7)"
+        default:
+            return l;
+    }
+};
+
 function FindNoteResult(result, note) {
     this.result = result;
     this.note = note;
@@ -154,7 +200,7 @@ function diffMain(selected, selectedBms, bms, precision, nosoundobj, bmsFiles) {
                 }
                 ret = findNote(selectedBms.playData[j], bms[i].playData, playDataIdx, precision, 0, selectedBms.wavData, bms[i].wavData);
                 if (ret.result > 0) {
-                    let diff = new DiffEntry(selectedBms.playData[j].measure.toString(), selectedBms.playData[j].lane, selectedBms.playData[j].note);
+                    let diff = new DiffEntry(selectedBms.playData[j].measure.toString(), getLaneDescription(selectedBms.playData[j].lane), selectedBms.playData[j].note);
                     if (ret.result === 2) {
                         diff.note += "->" + ret.note.note.toString();
                     }
