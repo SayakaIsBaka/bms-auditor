@@ -50,14 +50,14 @@ const checkKeysound = async (folder, charts) => {
         let wavKeysounds = false;
         let separateKeysounds = false;
         for (var f of keysoundFiles) {
-            let keysound = folder.find(e => e.name === f);
+            let keysound = folder.find(e => e.name.toLowerCase() === f.toLowerCase());
             if (keysound === undefined) {
                 const keysoundExtensions = [".wav", ".ogg", ".flac"];
                 for (var i = 0; i < 3 && keysound === undefined; i++) {
-                    keysound = folder.find(e => e.name === f.replace(/\.[^/.]+$/, keysoundExtensions[i]));
+                    keysound = folder.find(e => e.name.toLowerCase() === f.replace(/\.[^/.]+$/, keysoundExtensions[i]).toLowerCase());
                 }
             } else {
-                if (keysound.name.split('.').pop() === "ogg" && !separateKeysounds) { // If ogg keysound is defined in the BMS and the file is found
+                if (keysound.name.split('.').pop().toLowerCase() === "ogg" && !separateKeysounds) { // If ogg keysound is defined in the BMS and the file is found
                     const issue = new Issue(IssueType.SeparateOggBms, c.name, "");
                     issues.push(issue);
                     separateKeysounds = true;
@@ -66,7 +66,7 @@ const checkKeysound = async (folder, charts) => {
             if (keysound === undefined) {
                 console.log("Keysound not found in folder: " + f);
             } else {
-                if (keysound.name.split('.').pop() === "wav" && !wavKeysounds) { // If wav keysound is found
+                if (keysound.name.split('.').pop().toLowerCase() === "wav" && !wavKeysounds) { // If wav keysound is found
                     const issue = new Issue(IssueType.NonOggKeysounds, c.name, "");
                     issues.push(issue);
                     wavKeysounds = true;
@@ -114,18 +114,18 @@ const checkBga = async (folder, charts) => {
             let bmp = chart.headers.get("bmp" + toBase36(i));
             if (bmp !== undefined) {
                 const bmpExtensions = ["wmv", "mpg", "mpeg", "png", "jpg", "jpeg", "bmp"];
-                const curBmpExtension = bmp.split('.').pop();
+                const curBmpExtension = bmp.split('.').pop().toLowerCase();
                 if (!bmpExtensions.includes(curBmpExtension)) {
                     if (issues.find(e => e.issueType === IssueType.WrongBgaFormat && e.file === bmp) === undefined) {
                         const issue = new Issue(IssueType.WrongBgaFormat, bmp, curBmpExtension);
                         issues.push(issue);
                     }
                 }
-                let bmpFile = folder.find(e => e.name === bmp);
+                let bmpFile = folder.find(e => e.name.toLowerCase() === bmp.toLowerCase());
                 if (bmpFile === undefined) {
                     const bmpFallbackExtensions = [".png", ".jpg", ".bmp"];
                     for (var j = 0; j < 3 && bmpFile === undefined; j++) {
-                        bmpFile = folder.find(e => e.name === bmp.replace(/\.[^/.]+$/, bmpFallbackExtensions[j]));
+                        bmpFile = folder.find(e => e.name.toLowerCase() === bmp.replace(/\.[^/.]+$/, bmpFallbackExtensions[j]).toLowerCase());
                     }
                 } else {
                     if (curBmpExtension === "mp4") { // If mp4 BGA is defined in the BMS and the file is found
@@ -138,7 +138,7 @@ const checkBga = async (folder, charts) => {
                 } else {
                     let mp4Fallback = undefined;
                     if (curBmpExtension !== "mp4") {
-                        mp4Fallback = folder.find(e => e.name === bmp.replace(/\.[^/.]+$/, ".mp4"))
+                        mp4Fallback = folder.find(e => e.name.toLowerCase() === bmp.replace(/\.[^/.]+$/, ".mp4").toLowerCase())
                     }
                     if (bmpFile.size > maxSize) {
                         if (issues.find(e => e.issueType === IssueType.LargeBgaFile && e.file === bmpFile.name) === undefined) {
@@ -171,7 +171,7 @@ const checkDiff = async (charts) => {
 export const processFolder = async (folder) => {
     issues = []
     const bmsExtensions = ['bms', 'bme', 'bml', 'pms'];
-    let charts = folder.filter(e => bmsExtensions.includes(e.name.split('.').pop()));
+    let charts = folder.filter(e => bmsExtensions.includes(e.name.split('.').pop().toLowerCase()));
     if (charts.length < 1) {
       alert("This folder does not contain any BMS files, please select a proper BMS folder!");
       return null;

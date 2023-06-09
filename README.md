@@ -18,7 +18,6 @@ Live version available here: https://sayakaisbaka.github.io/bms-auditor
 
 ## TODO
 - basically everything else in the checklist
-- fix case-insensitive names
 - describe columns in diff results
 - maybe offer conversion features (movie transcode, wav to ogg)
 - drag and drop
