@@ -36,7 +36,7 @@ export const IssueType = Object.freeze({
     SeparateOggBms: {
         name: "Separate OGG BMS",
         severity: Severity.High,
-        description: "Keysounds were found to be defined as OGG in the BMS file. It is not needed to redfine the extension as BMS clients will automatically search for WAV / OGG files if the defined keysound was not found. Having different BMS files for different file formats will create duplicates in internet rankings, which is undesireable. This error can be ignored if only one format will be published."
+        description: "Keysounds were found to be defined as OGG in the BMS file. It is not needed to redefine the extension as BMS clients will automatically search for WAV / OGG files if the defined keysound was not found. Having different BMS files for different file formats will create duplicates in internet rankings, which is undesireable. This error can be ignored if only one format will be published."
     },
     WrongBgaFormat: {
         name: "Unsupported BGA format",
