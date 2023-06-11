@@ -168,6 +168,22 @@ const checkDiff = async (charts) => {
     }
 };
 
+const checkHeaders = async (folder, charts) => {
+    for (var c of charts) {
+        const chartStr = Reader.read(Buffer.from(await c.arrayBuffer()));
+        let chart = Compiler.compile(chartStr).chart;
+        if (chart.headers.get("total") === undefined) {
+            const issue = new Issue(IssueType.MissingTotal, c.name, "");
+            issues.push(issue);
+        }
+        console.log(folder.filter(e => /^preview.*\.(ogg|wav)$/.test(e.name)).length)
+        if (chart.headers.get("preview") === undefined && folder.filter(e => /^preview.*\.(ogg|wav)$/.test(e.name)).length < 1) {
+            const issue = new Issue(IssueType.MissingPreview, c.name, "");
+            issues.push(issue);
+        }
+    }
+};
+
 export const processFolder = async (folder) => {
     issues = []
     const bmsExtensions = ['bms', 'bme', 'bml', 'pms'];
@@ -183,6 +199,7 @@ export const processFolder = async (folder) => {
     checkAsciiFilenames(folder);
     await checkBga(folder, charts);
     await checkDiff(charts);
+    await checkHeaders(folder, charts);
 
     console.log(issues)
     return issues

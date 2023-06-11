@@ -57,6 +57,16 @@ export const IssueType = Object.freeze({
         name: "Differences in BMS found",
         severity: Severity.Medium,
         description: "Differences in keysound placement have been found between charts. When making charts of different difficulties using iBMSC / uBMSC / pBMSC, make sure that you have Disable vertical moves (D) checked when moving notes around. This is to prevent accidental upward/downward shifting of keysounds when charting."
+    },
+    MissingTotal: {
+        name: "Missing TOTAL value",
+        severity: Severity.Medium,
+        description: "The chart is missing a TOTAL value. The TOTAL value determines the speed of gauge (HP) recovery when playing on the easy or normal gauges in game. Having a higher TOTAL makes the chart easier to clear. If the TOTAL value is not set, the TOTAL value will be automatically set by the game, but this automatic value may be different depending on which BMS client the player is using (LR2, beatoraja)."
+    },
+    MissingPreview: {
+        name: "Missing preview",
+        severity: Severity.Low,
+        description: "The chart is missing the PREVIEW header, and no suitable preview file was found in the folder. If using beatoraja, the preview file will play when hovering over the song during music select, which may increase the BMS' visibility."
     }
 });
 

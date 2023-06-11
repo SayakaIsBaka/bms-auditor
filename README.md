@@ -15,6 +15,8 @@ Live version available here: https://sayakaisbaka.github.io/bms-auditor
 - MP4 BGA file defined in BMS check
 - Large BGA file check
 - BMS difference check (only notes for now)
+- TOTAL header check (no intelligence on value itself yet)
+- Preview check (header and files)
 
 ## TODO
 - basically everything else in the checklist
