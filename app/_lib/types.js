@@ -67,6 +67,11 @@ export const IssueType = Object.freeze({
         name: "Missing preview",
         severity: Severity.Low,
         description: "The chart is missing the PREVIEW header, and no suitable preview file was found in the folder. If using beatoraja, the preview file will play when hovering over the song during music select, which may increase the BMS' visibility."
+    },
+    WrongLnType: {
+        name: "Wrong LN type",
+        severity: Severity.High,
+        description: "The chart was found to be using the LNOBJ header while using LNTYPE 1 long notes. This will cause the long notes to not be processed properly in BMS players. If using LNTYPE 1 long notes (e.g. dragging the note in iBMSC / uBMSC / pBMSC to make a long note), the LNTYPE 1 header should be used and the LNOBJ header should not be present."
     }
 });
 

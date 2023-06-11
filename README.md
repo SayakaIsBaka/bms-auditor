@@ -17,6 +17,7 @@ Live version available here: https://sayakaisbaka.github.io/bms-auditor
 - BMS difference check (only notes for now)
 - TOTAL header check (no intelligence on value itself yet)
 - Preview check (header and files)
+- LNTYPE check
 
 ## TODO
 - basically everything else in the checklist

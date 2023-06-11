@@ -176,9 +176,12 @@ const checkHeaders = async (folder, charts) => {
             const issue = new Issue(IssueType.MissingTotal, c.name, "");
             issues.push(issue);
         }
-        console.log(folder.filter(e => /^preview.*\.(ogg|wav)$/.test(e.name)).length)
         if (chart.headers.get("preview") === undefined && folder.filter(e => /^preview.*\.(ogg|wav)$/.test(e.name)).length < 1) {
             const issue = new Issue(IssueType.MissingPreview, c.name, "");
+            issues.push(issue);
+        }
+        if (chart.headers.get("lnobj") !== undefined && chart.objects.all().filter(e => e.channel.startsWith("5") || e.channel.startsWith("6")).length > 0) {
+            const issue = new Issue(IssueType.WrongLnType, c.name, "");
             issues.push(issue);
         }
     }
