@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { openDirectory } from "./_lib/folder_picker";
 import { processFolder } from "./_lib/process";
 import ResultsTable from "./results";
