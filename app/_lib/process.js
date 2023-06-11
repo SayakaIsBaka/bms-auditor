@@ -1,5 +1,5 @@
 import { detectEncoding } from './chardet';
-import { Issue, IssueType } from './types';
+import { Issue, IssueType, Severity } from './types';
 import { Reader, Compiler, Keysounds } from 'bms';
 import { formatBytes, isAscii, toBase36 } from './utils';
 import { bmsDiff } from './bms-diff/diff';
@@ -105,7 +105,7 @@ const checkAsciiFilenames = (folder) => {
 }
 
 const checkBga = async (folder, charts) => {
-    const maxSize = 40000000 // 40M
+    const maxSize = 41943040 // 40M
 
     for (var c of charts) {
         const chartStr = Reader.read(Buffer.from(await c.arrayBuffer()));
@@ -205,5 +205,9 @@ export const processFolder = async (folder) => {
     await checkHeaders(folder, charts);
 
     console.log(issues)
+
+    // Sort array by severity
+    const severityOrder = Object.values(Severity);
+    issues = issues.sort((a, b) => severityOrder.indexOf(a.issueType.severity) - severityOrder.indexOf(b.issueType.severity))
     return issues
 };

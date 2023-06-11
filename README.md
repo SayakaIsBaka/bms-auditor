@@ -20,7 +20,6 @@ Live version available here: https://sayakaisbaka.github.io/bms-auditor
 - LNTYPE check
 
 ## TODO
-- basically everything else in the checklist
 - calculate average loudness of BMS
 - better BGA checks (actual codec detection, resolution detection, etc.)
 - maybe offer conversion features (movie transcode, wav to ogg)
