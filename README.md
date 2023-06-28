@@ -26,6 +26,7 @@ Live version available here: https://sayakaisbaka.github.io/bms-auditor
 - maybe offer conversion features (movie transcode, wav to ogg)
 - drag and drop
 - show notification if error
+- check for "overlapping" notes (extremely close notes on the same lane) on playable lanes
 
 ## Credits
 - Encoding detection slightly modified from bemuse-chardet: https://github.com/bemusic/bemuse-chardet
