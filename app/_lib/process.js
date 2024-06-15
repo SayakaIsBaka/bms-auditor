@@ -90,7 +90,8 @@ const checkKeysound = async (folder, charts) => {
 };
 
 const checkAsciiFilenames = (folder) => {
-    const folderName = folder[0].directoryHandle.name
+    let isFileApiSupported = folder[0].directoryHandle !== undefined;
+    const folderName = isFileApiSupported ? folder[0].directoryHandle.name : folder[0].webkitRelativePath.split('/', 1)[0]
     if (!isAscii(folderName)) {
         const issue = new Issue(IssueType.NonAsciiFilename, folderName, "");
         issues.push(issue);
